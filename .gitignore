@@ -1,0 +1,39 @@
+# Thư mục cài đặt thư viện (Bắt buộc phải ignore vì rất nặng)
+node_modules/
+.pnpm-store/
+
+# Thư mục xuất bản khi build dự án
+dist/
+dist-ssr/
+*.local
+
+# File tổng hợp code của Repomix (Tránh đẩy file XML này lên GitHub)
+repomix-output.xml
+
+# Các file log khi chạy lỗi
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Cấu hình môi trường chứa thông tin bảo mật (API Key, Mật khẩu...)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Thư mục cấu hình của các trình soạn thảo code (VS Code, WebStorm...)
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Các file rác của hệ điều hành tự sinh ra
+.DS_Store
+Thumbs.db
