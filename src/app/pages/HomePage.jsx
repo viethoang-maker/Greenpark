@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, MapPin, Clock, Ticket } from "lucide-react";
 import { TravelCard } from "../components/TravelCard";
-import { DESTINATIONS, CATEGORIES } from "../data/content";
-
-// Đã xóa hoàn toàn khối interface HomePageProps của TypeScript tại đây
+import { CATEGORIES } from "../data/content";
 
 const FILTER_CATEGORIES = [
   { id: "all", label: "Tất cả" },
@@ -12,19 +10,18 @@ const FILTER_CATEGORIES = [
   { id: "promotion", label: "Ưu đãi" },
 ];
 
-export function HomePage({ onNavigate }) {
+export function HomePage({ onNavigate, destinations = [] }) {
   const [activeFilter, setActiveFilter] = useState("all");
 
   const filtered =
     activeFilter === "all"
-      ? DESTINATIONS
-      : DESTINATIONS.filter((d) => d.type === activeFilter);
+      ? destinations
+      : destinations.filter((d) => d.type === activeFilter);
 
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
       <section className="relative h-screen min-h-[600px] overflow-hidden">
-        {/* THAY ĐỔI: Đổi đường dẫn ảnh Unsplash cũ thành /3.png */}
         <img
           src="/images/3.png"
           alt="Cánh đồng lúa xanh Củ Chi"
@@ -32,7 +29,6 @@ export function HomePage({ onNavigate }) {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
 
-        {/* Decorative grain texture overlay */}
         <div className="absolute inset-0 opacity-20"
           style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E\")" }}
         />
@@ -120,7 +116,6 @@ export function HomePage({ onNavigate }) {
             </button>
           </div>
           <div className="relative">
-            {/* THAY ĐỔI: Đổi đường dẫn ảnh minh họa giới thiệu thành /4.png */}
             <img
               src="/images/4.png"
               alt="Nông trại sinh thái xanh"
@@ -138,7 +133,7 @@ export function HomePage({ onNavigate }) {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
         <div className="text-center mb-8">
           <h2 className="font-['Vollkorn'] text-foreground text-3xl mb-2">Khám Phá Green Park</h2>
-          <p className="text-muted-foreground">9 điểm đến, 5 phân loại trải nghiệm độc đáo</p>
+          <p className="text-muted-foreground">Cập nhật động các điểm đến, phân loại trải nghiệm từ database</p>
         </div>
 
         {/* Filter chips */}

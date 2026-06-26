@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { X, Info } from "lucide-react";
-import { FOOD_DESTINATIONS } from "../data/content";
 
-// Đã xóa hoàn toàn khối interface FoodPageProps của TypeScript tại đây
-
-export function FoodPage({ onNavigate }) {
-  // Đã bỏ phần định nghĩa kiểu dữ liệu <string | null> ở dòng dưới đây
+export function FoodPage({ onNavigate, destinations = [] }) {
   const [modalOpen, setModalOpen] = useState(null);
-  const activeItem = FOOD_DESTINATIONS.find((d) => d.id === modalOpen);
+  
+  // Trích lọc mảng động ẩm thực
+  const foodDestinations = destinations.filter((d) => d.type === "food");
+  const activeItem = foodDestinations.find((d) => d.id === modalOpen);
 
   return (
     <div className="min-h-screen bg-background">
@@ -40,7 +39,7 @@ export function FoodPage({ onNavigate }) {
 
       {/* Zigzag layout */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-16">
-        {FOOD_DESTINATIONS.map((item, idx) => (
+        {foodDestinations.map((item, idx) => (
           <div
             key={item.id}
             className={`flex flex-col ${idx % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} gap-8 items-center mb-16`}
@@ -76,7 +75,7 @@ export function FoodPage({ onNavigate }) {
               <p className="text-sm text-accent font-medium italic mb-4">{item.subtitle}</p>
               <p className="text-muted-foreground leading-relaxed mb-5">{item.excerpt}</p>
               <ul className="space-y-2 mb-6">
-                {item.highlights.slice(0, 3).map((h, i) => (
+                {Array.isArray(item.highlights) && item.highlights.slice(0, 3).map((h, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-foreground/70">
                     <span className="w-1.5 h-1.5 bg-accent rounded-full mt-2 shrink-0" />
                     {h}
@@ -100,7 +99,7 @@ export function FoodPage({ onNavigate }) {
         <p className="text-muted-foreground text-sm mb-5">Đặt chỗ ngay và không bỏ lỡ những hương vị đồng quê độc đáo này.</p>
         <button
           onClick={() => onNavigate("contact")}
-          className="bg-primary text-primary-foreground font-semibold px-8 py-3 rounded-xl hover:brightness-110 transition-all"
+          className="bg-primary text-primary-foreground font-semibold px-8 py-3 shadow-md hover:brightness-110 transition-all"
         >
           Liên hệ đặt chỗ
         </button>
@@ -109,7 +108,7 @@ export function FoodPage({ onNavigate }) {
       {/* Modal */}
       {activeItem && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
           onClick={() => setModalOpen(null)}
         >
           <div
@@ -128,9 +127,9 @@ export function FoodPage({ onNavigate }) {
                 {activeItem.categoryLabel}
               </span>
             </div>
-            <div className="p-6">
-              <h3 className="font-['Vollkorn'] text-foreground text-lg mb-2">{activeItem.title}</h3>
-              <p className="text-sm text-muted-foreground mb-4">{activeItem.excerpt}</p>
+            <div className="p-6 text-sm">
+              <h3 className="font-['Vollkorn'] text-foreground text-lg mb-2 font-semibold">{activeItem.title}</h3>
+              <p className="text-muted-foreground mb-4 leading-relaxed">{activeItem.excerpt}</p>
               {activeItem.note && (
                 <div className="bg-accent/10 border border-accent/30 rounded-lg p-3 text-xs text-foreground/70 mb-4">
                   <strong>Lưu ý:</strong> {activeItem.note}
@@ -138,7 +137,7 @@ export function FoodPage({ onNavigate }) {
               )}
               <button
                 onClick={() => { setModalOpen(null); onNavigate("detail", activeItem.id); }}
-                className="w-full bg-primary text-primary-foreground font-semibold py-2.5 rounded-xl hover:brightness-110 transition-all text-sm"
+                className="w-full bg-primary text-primary-foreground font-semibold py-2.5 rounded-xl hover:brightness-110 transition-all shadow-sm"
               >
                 Xem bài viết đầy đủ
               </button>

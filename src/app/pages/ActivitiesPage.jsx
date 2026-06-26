@@ -1,14 +1,13 @@
 import { TravelCard } from "../components/TravelCard";
-import { ACTIVITY_DESTINATIONS } from "../data/content";
 
-// Đã xóa hoàn toàn khối interface của TypeScript tại đây
+export function ActivitiesPage({ onNavigate, destinations = [] }) {
+  // Lọc trực tiếp từ nguồn động truyền từ App.jsx
+  const activityDestinations = destinations.filter((d) => d.type === "activity");
 
-export function ActivitiesPage({ onNavigate }) {
   return (
     <div className="min-h-screen bg-background">
       {/* Page header */}
       <div className="relative h-64 sm:h-80 overflow-hidden">
-        {/* THAY ĐỔI: Đổi đường dẫn ảnh Unsplash cũ thành /5.png */}
         <img
           src="/images/5.png"
           alt="Hoạt động tại Green Park"
@@ -27,7 +26,7 @@ export function ActivitiesPage({ onNavigate }) {
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ACTIVITY_DESTINATIONS.map((dest) => (
+          {activityDestinations.map((dest) => (
             <TravelCard
               key={dest.id}
               image={dest.image}

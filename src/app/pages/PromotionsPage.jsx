@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { X, Star, ChevronRight } from "lucide-react";
-import { PROMOTION_DESTINATIONS } from "../data/content";
 
-export function PromotionsPage({ onNavigate }) {
+export function PromotionsPage({ onNavigate, destinations = [] }) {
   const [activePromo, setActivePromo] = useState(null);
-  const activeItem = PROMOTION_DESTINATIONS.find((d) => d.id === activePromo);
+
+  // Trích lọc mảng động ưu đãi
+  const promotionDestinations = destinations.filter((d) => d.type === "promotion");
+  const activeItem = promotionDestinations.find((d) => d.id === activePromo);
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="relative h-64 sm:h-80 overflow-hidden">
-        {/* THAY ĐỔI: Đổi đường dẫn ảnh Unsplash cũ thành /8.png */}
         <img
           src="/images/8.png"
           alt="Ưu đãi Green Park"
@@ -28,7 +29,7 @@ export function PromotionsPage({ onNavigate }) {
 
       {/* Promo cards */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-8">
-        {PROMOTION_DESTINATIONS.map((promo, idx) => (
+        {promotionDestinations.map((promo, idx) => (
           <div
             key={promo.id}
             className={`relative bg-card rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col ${
@@ -82,7 +83,7 @@ export function PromotionsPage({ onNavigate }) {
         ))}
       </div>
 
-      {/* Price table */}
+      {/* Bảng giá tham khảo dịch vụ tĩnh */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-16">
         <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
           <div className="bg-primary px-6 py-4">
@@ -99,12 +100,12 @@ export function PromotionsPage({ onNavigate }) {
               { label: "Tour học đường (nửa ngày)", price: "270.000 VNĐ/HS", note: "Bao gồm xe, HDV, bảo hiểm" },
               { label: "Tour học đường (cả ngày)", price: "325.000 VNĐ/HS", note: "Thêm bữa trưa & MC sự kiện" },
             ].map((row, i) => (
-              <div key={i} className="flex justify-between items-center px-6 py-3.5">
+              <div key={i} className="flex justify-between items-center px-6 py-3.5 text-sm">
                 <div>
-                  <p className="text-sm font-medium text-foreground">{row.label}</p>
+                  <p className="font-medium text-foreground">{row.label}</p>
                   {row.note && <p className="text-xs text-muted-foreground">{row.note}</p>}
                 </div>
-                <p className="text-sm font-semibold text-primary shrink-0 ml-4">{row.price}</p>
+                <p className="font-semibold text-primary shrink-0 ml-4">{row.price}</p>
               </div>
             ))}
           </div>
@@ -123,11 +124,11 @@ export function PromotionsPage({ onNavigate }) {
       {/* Detail modal */}
       {activeItem && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto"
           onClick={() => setActivePromo(null)}
         >
           <div
-            className="bg-card max-w-xl w-full rounded-2xl shadow-2xl overflow-hidden my-4"
+            className="bg-card max-w-xl w-full rounded-2xl shadow-2xl border border-border overflow-hidden my-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative">
@@ -142,12 +143,12 @@ export function PromotionsPage({ onNavigate }) {
                 {activeItem.categoryLabel}
               </span>
             </div>
-            <div className="p-6">
-              <h3 className="font-['Vollkorn'] text-foreground text-xl mb-2">{activeItem.title}</h3>
-              <p className="text-sm text-muted-foreground mb-4">{activeItem.excerpt}</p>
+            <div className="p-6 text-sm">
+              <h3 className="font-['Vollkorn'] text-foreground text-xl mb-2 font-semibold">{activeItem.title}</h3>
+              <p className="text-muted-foreground mb-4 leading-relaxed">{activeItem.excerpt}</p>
               <ul className="space-y-2 mb-5">
-                {activeItem.highlights.map((h, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-foreground/80">
+                {Array.isArray(activeItem.highlights) && activeItem.highlights.map((h, i) => (
+                  <li key={i} className="flex items-start gap-2 text-foreground/80">
                     <Star className="w-3.5 h-3.5 text-accent fill-current shrink-0 mt-0.5" />
                     {h}
                   </li>
@@ -159,14 +160,14 @@ export function PromotionsPage({ onNavigate }) {
                 </div>
               )}
               {activeItem.price && (
-                <div className="bg-primary text-primary-foreground rounded-xl p-4 text-center mb-4">
+                <div className="bg-primary text-primary-foreground rounded-xl p-4 text-center mb-4 shadow-sm">
                   <p className="text-xs opacity-70">Mức giá</p>
                   <p className="font-['Vollkorn'] text-xl text-accent font-semibold">{activeItem.price}</p>
                 </div>
               )}
               <button
                 onClick={() => { setActivePromo(null); onNavigate("contact"); }}
-                className="w-full bg-accent text-accent-foreground font-semibold py-3 rounded-xl hover:brightness-95 transition-all"
+                className="w-full bg-accent text-accent-foreground font-semibold py-3 rounded-xl hover:brightness-95 transition-all shadow-sm"
               >
                 Liên hệ đặt chỗ ngay
               </button>
