@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { db } from "../../lib/firebase";
-import { collection, onSnapshot, doc, setDoc, deleteDoc } from "firebase/firestore";
 import { Plus, Edit2, Trash2, LogOut, Globe, Image, LayoutGrid, FileText } from "lucide-react";
 // Thêm 'getDoc' vào đoạn import này
 import { collection, onSnapshot, doc, setDoc, deleteDoc, getDoc } from "firebase/firestore"; //
