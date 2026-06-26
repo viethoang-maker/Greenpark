@@ -23,15 +23,18 @@ export default function App() {
   // State lưu trữ dữ liệu động đồng bộ toàn cục từ Firestore
   const [liveDestinations, setLiveDestinations] = useState([]);
 
-  useEffect(() => {
+useEffect(() => {
     // Thiết lập kết nối thời gian thực với Firestore
     const unsubscribe = onSnapshot(collection(db, "destinations"), (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      // Nếu Firestore có data thì cập nhật, ngược lại dự phòng dùng dữ liệu local static
-      setLiveDestinations(data.length > 0 ? data : DESTINATIONS);
+      
+      // SỬA TẠI ĐÂY: Gộp song song mảng DESTINATIONS (local) và mảng data (Firestore)
+      const combined = [...DESTINATIONS, ...data];
+      setLiveDestinations(combined);
+      
     }, (error) => {
       console.error("Lỗi đồng bộ dữ liệu Firestore public: ", error);
-      setLiveDestinations(DESTINATIONS); // Fallback khi lỗi kết nối
+      setLiveDestinations(DESTINATIONS); // Fallback khi lỗi kết nối thì dùng dữ liệu gốc
     });
     return () => unsubscribe();
   }, []);
