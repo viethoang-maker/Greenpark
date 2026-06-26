@@ -1,0 +1,42 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. Phân hệ admin_users (Tài khoản mật khẩu Admin)
+    match /admin_users/{document} {
+      // Cho phép đọc để code frontend có thể đối chiếu lúc đăng nhập
+      allow read: if true; 
+      // Khóa chặt không cho bất kỳ ai ghi/xóa tài khoản qua mạng
+      allow write: if false; 
+    }
+
+    // 2. Collection: destinations (Thông tin điểm đến/hoạt động/ẩm thực/ưu đãi)
+    match /destinations/{document} {
+      // Ai cũng được phép đọc để xem giao diện web công khai
+      allow read: if true;
+      // Cho phép ghi dữ liệu (Tạo, Sửa, Xóa) 
+      allow write: if true; 
+    }
+
+    // 3. Collection: price_list (Bảng giá tham khảo nhanh)
+    match /price_list/{document} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // 4. Collection: bookings (Thông tin đặt chỗ từ Form Liên hệ)
+    match /bookings/{document} {
+      // Bất kỳ ai lướt web đều được tạo yêu cầu đặt chỗ qua Form
+      allow create: if true;
+      // Chỉ cho phép đọc/xem nếu cần thiết, khóa update và delete
+      allow read: if true;
+      allow update, delete: if false;
+    }
+
+    // 5. Luật khóa tất cả các dữ liệu phát sinh khác ngoài các collection trên
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
